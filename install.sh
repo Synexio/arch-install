@@ -24,27 +24,25 @@ swapon /dev/sda2
 
 sleep 3s
 
-echo -e "y" | pacstrap /mnt ${PACKAGES[@]}
+echo -e "y" | pacstrap /mnt base ${PACKAGES[@]}
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
-echo -e "exit" | arch-chroot /mnt
+sleep 1s
+
+arch-chroot /mnt /bin/bash -c 'ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime'
+arch-chroot /mnt /bin/bash -c 'hwclock --systohc'
 
 sleep 1s
 
-ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
-hwclock --systohc
+arch-chroot /mnt /bin/bash -c 'echo "LANG=$LOCALE" > /etc/locale.conf'
+arch-chroot /mnt /bin/bash -c 'touch /etc/vconsole.conf'
+arch-chroot /mnt /bin/bash -c 'echo "KEYMAP=$KEYMAP" >> /etc/vconsole.conf'
+arch-chroot /mnt /bin/bash -c 'echo "$HOSTNAME" > /etc/hostname'
 
 sleep 1s
 
-echo "LANG=$LOCALE" > /etc/locale.conf
-touch /etc/vconsole.conf
-echo "KEYMAP=$KEYMAP" >> /etc/vconsole.conf
-echo "$HOSTNAME" > /etc/hostname
-
-sleep 1s
-
-echo -e "${ROOT}\n${ROOT}" | passwd
+arch-chroot /mnt /bin/bash -c 'echo -e "${ROOT}\n${ROOT}" | passwd'
 
 sleep 1s
 
@@ -52,12 +50,9 @@ USERS=(${USER})
 for (( index = 0; index <= ${#USERS[@]} - 2; index+=2 ))
 do
  NEXT=$(($index+1))
- useradd ${USERS[$index]} -p ${USERS[$NEXT]}
+ arch-chroot /mnt /bin/bash -c 'useradd ${USERS[$index]} -p ${USERS[$NEXT]}'
 done
 
-sleep 1s
-
-exit
 
 sleep 1s
 
