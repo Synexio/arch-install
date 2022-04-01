@@ -1,12 +1,4 @@
-ROOTSIZE=""
-SWAPSIZE=""
-PACKAGES=""
-TIMEZONE=""
-LOCALE=""
-KEYMAP=""
-HOSTNAME=""
-ROOT=""
-USER=""
+#! /bin/sh
 
 read -p "Taille de la partition root en M: " ROOTSIZE
 read -p "Taille de la partition swap en M: " SWAPSIZE
