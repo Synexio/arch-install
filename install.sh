@@ -39,7 +39,7 @@ swapon /dev/sda2
 
 sleep 3s
 
-echo -e "y" | pacstrap /mnt base linux linux-firmware ${PACKAGES[@]}
+echo -e "y" | pacstrap /mnt base linux linux-firmware grub
 
 sleep 1s
 
@@ -90,5 +90,3 @@ umount -R /mnt
 sleep 1s
 
 shutdown now
-
-#Remove iso from hypervisor
