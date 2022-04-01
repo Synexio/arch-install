@@ -22,7 +22,7 @@ mkswap /dev/sda2
 mount /dev/sda1 /mnt
 swapon /dev/sda2
 
-sleep 5s
+sleep 3s
 
 echo -e "y" | pacstrap /mnt ${PACKAGES[@]}
 
@@ -30,16 +30,23 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 echo -e "exit" | arch-chroot /mnt
 
+sleep 1s
+
 ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 hwclock --systohc
 
+sleep 1s
 
 echo "LANG=$LOCALE" > /etc/locale.conf
 touch /etc/vconsole.conf
 echo "KEYMAP=$KEYMAP" >> /etc/vconsole.conf
 echo "$HOSTNAME" > /etc/hostname
 
+sleep 1s
+
 echo -e "${ROOT}\n${ROOT}" | passwd
+
+sleep 1s
 
 USERS=(${USER})
 for (( index = 0; index <= ${#USERS[@]} - 2; index+=2 ))
@@ -48,10 +55,14 @@ do
  useradd ${USERS[$index]} -p ${USERS[$NEXT]}
 done
 
-exit
-umount -R /mnt
-reboot
+sleep 1s
 
-#LOCALE=en_US.UTF-8
-#KEYMAP=fr-latin1
-#TIMEZONE=Europe/Paris
+exit
+
+sleep 1s
+
+umount -R /mnt
+
+sleep 1s
+
+reboot
