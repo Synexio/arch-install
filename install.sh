@@ -16,7 +16,7 @@ timedatectl set-ntp true
 echo -e "o\nn\np\n\n\n+${ROOTSIZE}M\nw" | fdisk /dev/sda
 echo -e "n\np\n\n\n+${SWAPSIZE}M\nt\n\n82\nw" | fdisk /dev/sda
 
-mkfs.ext4 /dev/sda1
+echo -e "y" | mkfs.ext4 /dev/sda1
 mkswap /dev/sda2
 
 mount /dev/sda1 /mnt
