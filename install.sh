@@ -50,6 +50,7 @@ arch-chroot /mnt /bin/bash -c "hwclock --systohc"
 
 sleep 1s
 
+arch-chroot /mnt /bin/bash -c "locale-gen"
 arch-chroot /mnt /bin/bash -c "echo LANG=$LOCALE > /etc/locale.conf"
 arch-chroot /mnt /bin/bash -c "touch /etc/vconsole.conf"
 arch-chroot /mnt /bin/bash -c "echo KEYMAP=$KEYMAP > /etc/vconsole.conf"
@@ -62,7 +63,7 @@ arch-chroot /mnt /bin/bash -c "echo -e \"${ROOT}\n${ROOT}\" | passwd"
 sleep 1s
 
 USERS=(${USER})
-if [ ${#USERS[@]} -gte 2 ]
+if (( ${#USERS[@]} >= 2 ))
 then
  for (( index = 0; index <= ${#USERS[@]} - 2; index+=2 ))
  do
@@ -78,4 +79,6 @@ umount -R /mnt
 
 sleep 1s
 
-reboot
+shutdown now
+
+#Remove iso from hypervisor
