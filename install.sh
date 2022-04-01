@@ -22,12 +22,13 @@ mkswap /dev/sda2
 mount /dev/sda1 /mnt
 swapon /dev/sda2
 
+sleep 5s
+
 echo -e "y" | pacstrap /mnt ${PACKAGES[@]}
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt
-exit
+echo -e "exit" | arch-chroot /mnt
 
 ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 hwclock --systohc
