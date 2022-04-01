@@ -41,6 +41,10 @@ sleep 3s
 
 echo -e "y" | pacstrap /mnt base linux linux-firmware ${PACKAGES[@]}
 
+sleep 1s
+
+echo -e "y" | pacstrap /mnt ${PACKAGES[@]}
+
 genfstab -U /mnt >> /mnt/etc/fstab
 
 sleep 1s
@@ -56,7 +60,13 @@ arch-chroot /mnt /bin/bash -c "touch /etc/vconsole.conf"
 arch-chroot /mnt /bin/bash -c "echo KEYMAP=$KEYMAP > /etc/vconsole.conf"
 arch-chroot /mnt /bin/bash -c "echo $HOSTNAME > /etc/hostname"
 
+arch-chroot /mnt /bin/bash -c "grub-install --target=i386-pc /dev/sda"
+
 sleep 1s
+
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+
+sleep 2s
 
 arch-chroot /mnt /bin/bash -c "echo -e \"${ROOT}\n${ROOT}\" | passwd"
 
