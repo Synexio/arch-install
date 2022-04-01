@@ -39,7 +39,7 @@ swapon /dev/sda2
 
 sleep 3s
 
-echo -e "y" | pacstrap /mnt base ${PACKAGES[@]}
+echo -e "y" | pacstrap /mnt base linux linux-firmware ${PACKAGES[@]}
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
