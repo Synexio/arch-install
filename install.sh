@@ -21,3 +21,36 @@ mkswap /dev/sda2
 
 mount /dev/sda1 /mnt
 swapon /dev/sda2
+
+echo -e "y" | pacstrap /mnt ${PACKAGES[@]}
+
+genfstab -U /mnt >> /mnt/etc/fstab
+
+arch-chroot /mnt
+exit
+
+ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
+hwclock --systohc
+
+
+echo "LANG=$LOCALE" > /etc/locale.conf
+touch /etc/vconsole.conf
+echo "KEYMAP=$KEYMAP" >> /etc/vconsole.conf
+echo "$HOSTNAME" > /etc/hostname
+
+echo -e "${ROOT}\n${ROOT}" | passwd
+
+USERS=(${USER})
+for (( index = 0; index <= ${#USERS[@]} - 2; index+=2 ))
+do
+ NEXT=$(($index+1))
+ useradd ${USERS[$index]} -p ${USERS[$NEXT]}
+done
+
+exit
+umount -R /mnt
+reboot
+
+#LOCALE=en_US.UTF-8
+#KEYMAP=fr-latin1
+#TIMEZONE=Europe/Paris
